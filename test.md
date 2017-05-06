@@ -16,7 +16,7 @@ If you’re like me, (or anyone who has ever used anvi’o’s glorious interact
 
 I’ve certainly sent my fair share of emails to the team asking to clarify a view I thought I had pinned down, and it turned out I was slightly (or completely) wrong. So last time I was in the same city as Meren I made sure he went over these with me, several times, in painstakingly repetitive detail for him I’m sure :). But I convinced him it was worth his time to do so by saying I’d make a blog post about it to hopefully help others too. So first here’s a quick reference table, and after that I’ll try to highlight some of the nuances in more detail and give examples where each can be particularly useful.
 
-
+|:---|:---|
 |*Abundance*|mean coverage of a split divided by overall sample mean coverage|
 |*Relative abundance*|# of reads recruited to a split divided by total reads recruited to that split across all samples|
 |*Max-normalized ratio*|# of reads recruited to a split divided by the maximum number of reads recruited to that split in any sample|
