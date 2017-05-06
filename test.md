@@ -12,32 +12,20 @@ authors: [mike]
 <a href="https://github.com/AstrobioMike/Misc/blob/master/views.pdf"><img src="https://github.com/AstrobioMike/Misc/blob/master/views.pdf" width="80%" /></a>
 </div>
 
+If you’re like me, (or anyone who has ever used anvi’o’s glorious interactive interface without Meren or Tom sitting right next to them), then you’ve probably found yourself at some point wondering if these different views you’re exploring actually mean what you’ve convinced yourself they mean. Sure there are some pretty safe ones that you can rationalize to yourself with some confidence, like “Mean coverage” or “Mean coverage Q2Q3” for example. But even those that seem relatively benign, like “Relative abundance”, can be pretty tricky. (Relative to what? All samples? All splits?) And don’t even get me started on “Detection”! (Meren’s taken quite a bit of heat for this term’s ambiguity, and rightfully so, hehe.)
+
+I’ve certainly sent my fair share of emails to the team asking to clarify a view I thought I had pinned down, and it turned out I was slightly (or completely) wrong. So last time I was in the same city as Meren I made sure he went over these with me, several times, in painstakingly repetitive detail for him I’m sure :). But I convinced him it was worth his time to do so by saying I’d make a blog post about it to hopefully help others too. So first here’s a quick reference table, and after that I’ll try to highlight some of the nuances in more detail and give examples where each can be particularly useful.
 
 
-One of the major strengths of anvi'o is the capability of manually curating your genome bins with real-time updates of percent completeness and contamination estimates. The information necessary to estimate completeness comes from the scanning of your contigs using previously published bacterial single-copy gene collections. When you run the following command following the [standard metagenomic workflow]({% post_url anvio/2016-06-22-anvio-tutorial-v2 %}), the occurrence of bacterial single-copy genes across your contigs is all added to your contigs database:
+|*Abundance*|mean coverage of a split divided by overall sample mean coverage|
+|*Relative abundance*|# of reads recruited to a split divided by total reads recruited to that split across all samples|
+|*Max-normalized ratio*|# of reads recruited to a split divided by the maximum number of reads recruited to that split in any sample|
+|*Mean coverage*|average depth of coverage across split|
+|*Mean coverage Q2Q3*|average depth of coverage excluding nucleotide positions with coverages in the 1st and 4th quartiles|
+|*Detection*|proportion of nucleotides in a split that are covered at least 1X|
+|*Coverage STD*|standard deviation of coverage for a given split|
+|*Variability*|SNVs per kb|
 
-
-{% highlight bash %}
-$ anvi-run-hmms -c contigs.db
-{% endhighlight %}
-
-As of today, when `anvi-run-hmms` is run without providing any further arguments, it automatically utilizes [the four HMM profiles included in anvi'o codebase](https://github.com/meren/anvio/tree/master/anvio/data/hmm). These profiles are quite useful and convenient for bacterial genomes. However, if you are purposely trying to refine archaeal bins, or perhaps if you are working with a lab that has spent some time and effort to build their own single-copy gene collections, the ability to change the underlying HMM single-copy gene collections would certainly help. Fortunately, anvi'o has an easy way to specify which collection(s) to consider when working in the interactive mode.
-
-As noted above, running the `anvi-run-hmms` program with no additional arguments other than your contigs database will scan for the four preloaded bacterial single-copy gene collections. If you would like to use another collection, you need only to add the location of the directory that contains your HMM profiles:
-
-{% highlight bash %}
-$ anvi-run-hmms -c contigs.db -H Rinke_archaeal_HMM/
-{% endhighlight %}
-
-Anvi'o will expect the directory denoted by the `-H` flag above to contain four special files:
-
-|File Name|Content and Purpose|
-|:---|:---|
-|*genes.hmm.gz*|A gzip of concatenated HMM profiles.|
-|*genes.txt*|A TAB-delimited file containing three columns; gene name, accession number, and source of HMM profiles listed in genes.hmm.gz.|
-|*kind.txt*|A flat text file which contains a single word identifying what type of profile the directory contains. If this word is 'singlecopy', the profile is used to calculate percent completeness and contamination. Otherwise it will only be used to visualize contigs with HMM hits without being utilized to estimate completeness.|
-|*reference.txt*|A file containing source information for this profile to cite it properly.|
-|*target.txt*|A file containing the target alphabet and context. See [this](https://github.com/meren/anvio/pull/402) for more details. For this particular collection the target will be `AA:GENE` (because it was prepared using amino acid alignments, and we want them to be searched within gene calls stored in contigs databases), however, the the target term could be any combination of `AA`, `DNA`, or `RNA` for the alphabet part, and `GENE` or `CONTIG` for the context part (well, except `AA:CONTIG`, because we can't translate contigs).|
 
 Examples of each file can be found [here](https://github.com/meren/anvio/tree/master/anvio/data/hmm/Campbell_et_al), and if you'd like to jump right in using the archaeal single-copy gene collection by [Rinke et al.](http://www.nature.com/nature/journal/v499/n7459/full/nature12352.html), please help yourself to the directory located [here]({{ site.url }}/files/Rinke_archaeal_HMM.tar.gz).
 
