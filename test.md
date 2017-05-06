@@ -29,7 +29,7 @@ I’ve certainly sent my fair share of emails to the team asking to clarify a vi
 
 
 **Abundance** 
--	mean coverage of a split divided by overall sample mean coverage
+-	mean coverage of a split divided by overall sample mean coverage -
 Abundance for a split is constrained to within one sample. In a sense this view is telling you that those splits with larger abundance values are more represented in that sample (i.e. recruited more reads) than those splits with smaller abundance values. And it does this by providing the ratio of that split’s mean coverage to that sample’s overall mean coverage incorporating all contigs. So if your abundance value is 2, that split’s mean coverage is twice that of the mean for all contigs in that sample.
 
 **Relative abundance**
