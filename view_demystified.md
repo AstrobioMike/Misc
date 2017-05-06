@@ -16,6 +16,7 @@ If you’re like me, (or anyone who has ever used anvi’o’s glorious interact
 
 I’ve certainly sent my fair share of emails to the team asking to clarify a view I thought I had pinned down, and it turned out I was slightly (or completely) wrong. So last time I was in the same city as Meren I made sure he went over these with me, several times, in painstakingly repetitive detail for him I’m sure :). But I convinced him it was worth his time to do so by saying I’d make a blog post about it to hopefully help others too. So first here’s a quick reference table, and after that I’ll try to highlight some of the nuances in more detail and give examples where each can be particularly useful.
 
+
 |View|Value|
 |:---|:---|
 |*Abundance*|mean coverage of a split divided by overall sample mean coverage|
@@ -28,7 +29,8 @@ I’ve certainly sent my fair share of emails to the team asking to clarify a vi
 |*Variability*|SNVs per kb|
 
 
-**Abundance** - *mean coverage of a split divided by overall sample mean coverage*
+
+**Abundance** - *mean coverage of a split divided by that sample's overall mean coverage*
 
 Abundance for a split is constrained to within one sample. In a sense this view is telling you that those splits with larger abundance values are more represented in that sample (i.e. recruited more reads) than those splits with smaller abundance values. And it does this by providing the ratio of that split’s mean coverage to that sample’s overall mean coverage incorporating all contigs. So if your abundance value is 2, that split’s mean coverage is twice that of the mean for all contigs in that sample.
 
