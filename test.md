@@ -27,25 +27,48 @@ I’ve certainly sent my fair share of emails to the team asking to clarify a vi
 |*Coverage STD*|standard deviation of coverage for a given split|
 |*Variability*|SNVs per kb|
 
-|File Name|Content and Purpose|
-|:---|:---|
-|*genes.hmm.gz*|A gzip of concatenated HMM profiles.|
-|*genes.txt*|A TAB-delimited file containing three columns; gene name, accession number, and source of HMM profiles listed in genes.hmm.gz.|
-|*kind.txt*|A flat text file which contains a single word identifying what type of profile the directory contains. If this word is 'singlecopy', the profile is used to calculate percent completeness and contamination. Otherwise it will only be used to visualize contigs with HMM hits without being utilized to estimate completeness.|
-|*reference.txt*|A file containing source information for this profile to cite it properly.|
-|*target.txt*|A file containing the target alphabet and context. See [this](https://github.com/meren/anvio/pull/402) for more details. For this particular collection the target will be `AA:GENE` (because it was prepared using amino acid alignments, and we want them to be searched within gene calls stored in contigs databases), however, the the target term could be any combination of `AA`, `DNA`, or `RNA` for the alphabet part, and `GENE` or `CONTIG` for the context part (well, except `AA:CONTIG`, because we can't translate contigs).|
+Abundance 
+-	mean coverage of a split divided by overall sample mean coverage
+
+Abundance of a split is constrained to within one sample. In a sense this view is telling you that those splits with larger abundance values are more represented in that sample (i.e. recruited more reads) than those splits with smaller abundance values. And it does this by providing the ratio of that split’s mean coverage to that sample’s overall mean coverage incorporating all contigs. So if your abundance value is 2, that split’s mean coverage is twice that of the mean for all contigs in that sample.
+
+Relative abundance
+-	proportion of reads recruited to a split out of the total reads recruited to that split across all samples
+
+Relative abundance considers one split across all samples. This will tell you in which sample a particular split recruited the most reads. Since it is normalized to the total number of reads recruited to split across all samples, values from all samples for a given split will always sum to 1. 
+
+Max-normalized ratio
+-	proportion of reads recruited to a split out of the maximum number of reads recruited to that split in any sample
+
+This also considers one split across all samples. But in this case the value is normalized to the single maximum value for that split (as opposed to the sum as in relative abundance). Because of this the sample containing the split that contributed the max value will always equal 1, and the value for that split in the other samples will be the fraction of that max.
+
+Mean coverage
+-	average depth of coverage across split
+
+Add up the coverage of each nucleotide in a split, and divide by the length of the split. 
 
 
-Examples of each file can be found [here](https://github.com/meren/anvio/tree/master/anvio/data/hmm/Campbell_et_al), and if you'd like to jump right in using the archaeal single-copy gene collection by [Rinke et al.](http://www.nature.com/nature/journal/v499/n7459/full/nature12352.html), please help yourself to the directory located [here]({{ site.url }}/files/Rinke_archaeal_HMM.tar.gz).
+Mean overage Q2Q3
+-	average depth of coverage across split excluding nucleotide positions with coverage values falling outside of the interquartile range for that split
 
-The following figure compares the completeness and contamination estimates for 5 archaeal and 3 bacterial genomes I pulled from [IMG](https://img.jgi.doe.gov/){:target="_blank"}. For each genome, the figure displays the estimations based on the default bacterial single-copy gene collections distributed with anvi'o, and Rinke et al.'s archaeal gene collection I added to my contigs database:
+Calculated the same as mean coverage, except only incorporating those nucleotide coverage values that fall within 2nd and 3rd quartiles of the distribution of nucleotide coverages for that split. This can help smooth out the mean coverage visualization by removing nucleotide coverage values from the equation that may be outliers due to non-specific mapping. 
 
-<div class="centerimg">
-<a href="{{ site.url }}/images/anvio/2016-05-21-archaeal-single-copy-genes/archaea-anvio.png"><img src="{{ site.url }}/images/anvio/2016-05-21-archaeal-single-copy-genes/archaea-anvio.png" width="80%" /></a>
-</div>
 
-Not all that surprisingly, percent completeness estimates for the archaeal bins are rather poor when they are based on HMM profiles for bacterial single-copy genes. In contrast, when the archaeal profile is used, they are much more accurately evaluated.
+Coverage STD
+-	the standard deviation of coverage values for a given split
+
+This is constrained to an individual split in an individual sample, and represents the standard deviation of the nucleotide coverage values in that split. 
+
+Detection
+-	the proportion of that split that is covered at least 1X 
+
+Detection gives you an idea of how much of the split actually recruited reads to it. The utility of this is most clearly demonstrated with the following figure. Samples 1 and 2 may have the same mean coverage (say ~50x). However, Sample_1’s detection would be 1 (as all nucleotides in the split are covered by at least one read), while Sample_2’s detection would be ~0.5. From the main interactive interface, mean coverage would appear to be consistent between these splits. But the detection view would show you at a glance that something funny is going on that probably needs a closer look. 
+
+Variability 
+-	single-nucleotide variants per kilobase
+
+This gives you a view of SNV density of each split. This can give you an idea of how much variability there is in the reads that successfully recruit to that split. If resolving closely related populations of organisms is something you’re interested in, be sure to check out this and this. 
 
 ---
 
-If you are anything like me and many other fortunate researcher out there, you have already realized that not only is anvi'o incredibly user-friendly, which of course is nice, but also it can be an extremely powerful tool. This is largely due to it being designed with an underlying framework that can be easily manipulated (in small part exemplified here) and built upon. To be sure, while most of us are still barely scratching the surface as far as leveraging anvi'o's full potential, the team is busy adding more and more exceedingly wonderful functionality - definitely check out the[ CPR hunting]({% post_url miscellaneous/2016-04-17-predicting-CPR-Genomes %}){:target="_blank"} and [pangenomics]({% post_url anvio/2016-11-08-pangenomics-v2 %}){:target="_blank"} posts if you haven't yet!
+The capabilities of anvi’o are constantly expanding, but the heart of the interactive interface lies with facilitating the manual curation of metagenomic bins. All of these views utilizing different metrics are here to help in that effort of identifying which contigs/splits likely originate from a similar source. It’s certainly a good idea to take a peek at multiple views when refining your bins, so be sure to take advantage of them!
